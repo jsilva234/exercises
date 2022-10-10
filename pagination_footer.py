@@ -7,7 +7,7 @@ def _calculate_arounds(
     around_len,
     last_page,
 ):
-    reversed_left_side_values = []
+    left_side_values = []
     right_side_values = []
 
     for count in range(1, around_len + 1):
@@ -21,13 +21,12 @@ def _calculate_arounds(
             break
 
         if is_left_valid:
-            reversed_left_side_values.append(current_left)
+            left_side_values = [current_left, *left_side_values]
 
         if is_right_valid:
             right_side_values.append(current_right)
 
-    reversed_left_side_values.reverse()
-    return reversed_left_side_values, right_side_values
+    return left_side_values, right_side_values
 
 
 def _calculat_footer_center(current_page, total_pages, around_len):
@@ -72,26 +71,25 @@ def _calculate_right_boundery(
     last_page,
     last_page_footer_center,
 ):
-    reversed_right_boundery = []
+    right_boundery = []
 
     for i in range(0, boundery_len):
         page_num = last_page - i
         if page_num <= last_page_footer_center:
             break
 
-        reversed_right_boundery.append(page_num)
+        right_boundery = [page_num, *right_boundery]
 
-    if len(reversed_right_boundery):
-        first_page_right_boundery = reversed_right_boundery[-1]
+    if len(right_boundery):
+        first_page_right_boundery = right_boundery[0]
 
         if last_page_footer_center != first_page_right_boundery - 1:
-            reversed_right_boundery.append(ELLIPSES)
+            right_boundery = [ELLIPSES, *right_boundery]
 
     elif last_page_footer_center != last_page:
-        reversed_right_boundery.append(ELLIPSES)
+        right_boundery = [ELLIPSES, *right_boundery]
 
-    reversed_right_boundery.reverse()
-    return reversed_right_boundery
+    return right_boundery
 
 
 def pagination_footer(
